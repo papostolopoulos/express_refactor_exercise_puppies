@@ -1,20 +1,36 @@
 "use strict";
-
+//Set variables needed
 const PORT = 8000;
 const express = require("express");
 const app = express();
 var supertest = require("supertest");
 var bodyParser = require("body-parser");
+var path = require("path")
 var ejs = require("ejs");
 var myObj = {};
-
 var counter = 1;
 var puppies = [];
 
 app.set("view engine", "ejs");
 
+//What to display in root (localhost:8000);
 app.get("/", function(req,res){
   res.send(puppies);
+});
+
+//What to display in localhost:8000/about
+app.get('/about', function(req, res){
+  res.render('about.ejs');
+});
+
+//What to display in localhost:8000/contact
+app.get('/contact', function(req, res){
+  res.render('contact.ejs');
+});
+
+
+app.get("/contact", function (req, res) {
+  res.send("paras.")
 });
 
 app.get("/puppies/new", function (req, res) {
@@ -22,69 +38,21 @@ app.get("/puppies/new", function (req, res) {
 });
 
 app.get("/puppies/:id", function(req, res){
-  // console.log(puppies[0]);
-  // console.log(req.params.id);
-  // console.log(puppies.length)
 
   for(var i = 0; i < puppies.length; i++){
-    console.log("puppies[i] >>>>>> ")
-    console.log(puppies[i]);
-    console.log("puppies[i].id >>>>>> ")
-    console.log(puppies[i].id);
-    console.log("req.params.id >>>>>> ")
-    console.log(req.params.id)
-
     if(puppies[i].id === Number(req.params.id)){
       res.send(puppies[i]);
     }
   }
-})
-
-app.get("/puppies-form", function(req, res){
-
-  myObj = {
-    "name": req.query.name,
-    "age": req.query.age,
-    "id": counter
-  }
-
-  counter++
-
-  //
-  // myObj.name = req.query.name;
-  // myObj.age = req.query.age;
-  // myObj.id = counter;
-  //
-  // counter ++;
-
-  puppies.push(myObj);
-
-  console.log(res.status);
-  // res.redirect(302, puppies);
-  res.send(puppies);
-  console.log(puppies);
 });
 
-//* `get` `/puppies` to save a puppy to your `puppies` array.
-
+//Puppies page
 app.get("/puppies", function (req, res) {
-  // if(myObj.name){
-  // myObj.name = req.query.name
-  // myObj.age = req.query.age
-  // myObj.id = counter
-// }
-// counter++;
-
-  // console.log(myObj);
-  // console.log(puppies);
-
-  // puppies.push(myObj);
-
   myObj = {
     "name": req.query.name,
     "age": req.query.age,
     "id": counter
-  }
+  };
 
 if(myObj.name){
   puppies.push(myObj);
@@ -93,6 +61,8 @@ if(myObj.name){
   res.status(302).send(puppies);
 });
 
+
+//Listen to the server
 app.listen(PORT, function(){
   console.log(`Server is listening on ${PORT}`);
 });
