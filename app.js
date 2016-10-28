@@ -3,75 +3,63 @@
 const PORT = 8000;
 const express = require("express");
 const app = express();
-var supertest = require("supertest");
-var bodyParser = require("body-parser");
-var path = require("path")
+var routes = require("./routes/index");
 var ejs = require("ejs");
-var myObj = {};
-var counter = 1;
-var puppies = [];
+// var path = require("path")
+// var supertest = require("supertest");
+// var bodyParser = require("body-parser");
 
-app.set("view engine", "ejs");
-
-//What to display in root (localhost:8000);
-app.get("/", function(req,res){
-  res.send(puppies);
+//Listen to the server
+app.listen(PORT, function(){
+  console.log(`Server is listening on ${PORT} and for express REFACTOR puppies exercise`);
 });
+//app.sets
+app.set("view engine", "ejs");
+//app.uses
+app.use("/puppies", routes.puppies);
 
+/*---APP GETS---*/
+
+//What to display in localhost:8000/form
+app.get("/puppies/new", function (req, res) {
+  res.render("form");
+});
 //What to display in localhost:8000/about
 app.get('/about', function(req, res){
   res.render('about.ejs');
 });
-
 //What to display in localhost:8000/contact
 app.get('/contact', function(req, res){
   res.render('contact.ejs');
 });
 
+// app.get("/puppies/:id", function(req, res){
+//
+//   for(var i = 0; i < puppies.length; i++){
+//     if(puppies[i].id === Number(req.params.id)){
+//       res.send(puppies[i]);
+//     }
+//   }
+// });
 
-app.get("/contact", function (req, res) {
-  res.send("paras.")
-});
-
-app.get("/puppies/new", function (req, res) {
-  res.render("form");
-});
-
-app.get("/puppies/:id", function(req, res){
-
-  for(var i = 0; i < puppies.length; i++){
-    if(puppies[i].id === Number(req.params.id)){
-      res.send(puppies[i]);
-    }
-  }
-});
-
-//Puppies page
-app.get("/puppies", function (req, res) {
-  myObj = {
-    "name": req.query.name,
-    "age": req.query.age,
-    "id": counter
-  };
-
-if(myObj.name){
-  puppies.push(myObj);
-  counter++;
-}
-  res.status(302).send(puppies);
-});
+// //Puppies page
+// app.get("/puppies", function (req, res) {
+//   var myObj = {
+//     "name": req.query.name,
+//     "age": req.query.age,
+//     "id": counter
+//   };
+//
+// if(myObj.name){
+//   puppies.push(myObj);
+//   counter++;
+// }
+//   res.status(302).send(puppies);
+// });
 
 
-//Listen to the server
-app.listen(PORT, function(){
-  console.log(`Server is listening on ${PORT}`);
-});
 
 
-module.exports = {
-  app,
-  puppies
-};
 
 /*
 ### Background
