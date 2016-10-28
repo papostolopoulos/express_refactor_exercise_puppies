@@ -7,9 +7,15 @@ var puppyJs = require("../models/puppy");
 var puppiesArr = puppyJs.puppiesArr;
 var Puppy = puppyJs.Puppy;
 
+//What to display in localhost:8000/form
+router.route("/new")
+.get(function(req, res) {
+  res.render("form");
+});
 
 var counter = 1;
 
+//DISPLAY PUPPIES
 router.route("/puppies_form")
 .get(function (req, res) {
   console.log("Inside the router.route");
@@ -28,15 +34,14 @@ router.route("/")
   res.send(puppiesArr);
 });
 
-
-//GOT FROM APP.JS, MIGHT NEED TO MODIFY
-// app.get("/puppies/:id", function(req, res){
-//
-//   for(var i = 0; i < puppies.length; i++){
-//     if(puppies[i].id === Number(req.params.id)){
-//       res.send(puppies[i]);
-//     }
-//   }
-// });
+//What to display in puppies/{num}
+router.route("/:id")
+.get(function(req, res) {
+  for(let i = 0; i < puppiesArr.length; i++){
+      if(puppiesArr[i].id === Number(req.params.id)){
+        res.send(puppiesArr[i]);
+      }
+    }
+});
 
 module.exports = router;
